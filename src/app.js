@@ -19,6 +19,15 @@ const successResponse = (res, data, message = 'Success', statusCode = 200) => {
   });
 };
 
+// Helper: error response
+const errorResponse = (res, message, statusCode = 400) => {
+  return res.status(statusCode).json({
+    status: 'error',
+    message,
+    data: null,
+  });
+};
+
 // GET /books - Get all books
 app.get('/books', (req, res) => {
   const { genre, available } = req.query;
@@ -28,6 +37,13 @@ app.get('/books', (req, res) => {
   if (available !== undefined) result = result.filter(b => b.available === (available === 'true'));
 
   return successResponse(res, result, `Retrieved ${result.length} book(s)`);
+});
+
+// GET /books/:id - Get single book
+app.get('/books/:id', (req, res) => {
+  const book = books.find(b => b.id === parseInt(req.params.id));
+  if (!book) return errorResponse(res, 'Book not found', 404);
+  return successResponse(res, book, 'Book retrieved successfully');
 });
 
 module.exports = app;
