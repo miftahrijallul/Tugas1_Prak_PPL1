@@ -87,4 +87,9 @@ app.delete('/books/:id', (req, res) => {
   return successResponse(res, deleted, 'Book deleted successfully');
 });
 
+// Health check
+app.get('/health', (req, res) => {
+  return successResponse(res, { uptime: process.uptime(), timestamp: new Date().toISOString() }, 'API is healthy');
+});
+
 module.exports = app;
