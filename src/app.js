@@ -21,10 +21,11 @@ const successResponse = (res, data, message = 'Success', statusCode = 200) => {
 
 // GET /books - Get all books
 app.get('/books', (req, res) => {
-  const { genre } = req.query;
+  const { genre, available } = req.query;
   let result = [...books];
 
   if (genre) result = result.filter(b => b.genre.toLowerCase() === genre.toLowerCase());
+  if (available !== undefined) result = result.filter(b => b.available === (available === 'true'));
 
   return successResponse(res, result, `Retrieved ${result.length} book(s)`);
 });
