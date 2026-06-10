@@ -43,7 +43,7 @@ app.get('/books', (req, res) => {
 // GET /books/:id - Get single book
 app.get('/books/:id', (req, res) => {
   const book = books.find(b => b.id === parseInt(req.params.id));
-  if (!book) return errorResponse(res, 'Book not found', 404);
+  if (!book) return errorResponse(res, `Book with id ${req.params.id} not found`, 404);
   return successResponse(res, book, 'Book retrieved successfully');
 });
 
@@ -63,7 +63,7 @@ app.post('/books', (req, res) => {
 // PUT /books/:id - Update book
 app.put('/books/:id', (req, res) => {
   const index = books.findIndex(b => b.id === parseInt(req.params.id));
-  if (index === -1) return errorResponse(res, 'Book not found', 404);
+  if (index === -1) return errorResponse(res, `Book with id ${req.params.id} not found`, 404);
 
   const { title, author, genre, year, available } = req.body;
   books[index] = {
@@ -81,7 +81,7 @@ app.put('/books/:id', (req, res) => {
 // DELETE /books/:id - Delete book
 app.delete('/books/:id', (req, res) => {
   const index = books.findIndex(b => b.id === parseInt(req.params.id));
-  if (index === -1) return errorResponse(res, 'Book not found', 404);
+  if (index === -1) return errorResponse(res, `Book with id ${req.params.id} not found`, 404);
 
   const deleted = books.splice(index, 1)[0];
   return successResponse(res, deleted, 'Book deleted successfully');
