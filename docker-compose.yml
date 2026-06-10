@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  library-api:
+    build: .
+    container_name: library-api
+    ports:
+      - "8080:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped
