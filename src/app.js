@@ -60,4 +60,31 @@ app.post('/books', (req, res) => {
   return successResponse(res, newBook, 'Book created successfully', 201);
 });
 
+// PUT /books/:id - Update book
+app.put('/books/:id', (req, res) => {
+  const index = books.findIndex(b => b.id === parseInt(req.params.id));
+  if (index === -1) return errorResponse(res, 'Book not found', 404);
+
+  const { title, author, genre, year, available } = req.body;
+  books[index] = {
+    ...books[index],
+    ...(title && { title }),
+    ...(author && { author }),
+    ...(genre && { genre }),
+    ...(year && { year: parseInt(year) }),
+    ...(available !== undefined && { available }),
+  };
+
+  return successResponse(res, books[index], 'Book updated successfully');
+});
+
+// DELETE /books/:id - Delete book
+app.delete('/books/:id', (req, res) => {
+  const index = books.findIndex(b => b.id === parseInt(req.params.id));
+  if (index === -1) return errorResponse(res, 'Book not found', 404);
+
+  const deleted = books.splice(index, 1)[0];
+  return successResponse(res, deleted, 'Book deleted successfully');
+});
+
 module.exports = app;
