@@ -9,6 +9,7 @@ let books = [
   { id: 2, title: 'The Pragmatic Programmer', author: 'David Thomas', genre: 'Technology', year: 1999, available: true },
   { id: 3, title: 'Atomic Habits', author: 'James Clear', genre: 'Self-Help', year: 2018, available: false },
 ];
+let nextId = 4;
 
 // Helper: success response
 const successResponse = (res, data, message = 'Success', statusCode = 200) => {
@@ -44,6 +45,19 @@ app.get('/books/:id', (req, res) => {
   const book = books.find(b => b.id === parseInt(req.params.id));
   if (!book) return errorResponse(res, 'Book not found', 404);
   return successResponse(res, book, 'Book retrieved successfully');
+});
+
+// POST /books - Create new book
+app.post('/books', (req, res) => {
+  const { title, author, genre, year } = req.body;
+
+  if (!title || !author || !genre || !year) {
+    return errorResponse(res, 'Fields title, author, genre, and year are required', 400);
+  }
+
+  const newBook = { id: nextId++, title, author, genre, year: parseInt(year), available: true };
+  books.push(newBook);
+  return successResponse(res, newBook, 'Book created successfully', 201);
 });
 
 module.exports = app;
